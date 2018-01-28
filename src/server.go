@@ -8,20 +8,28 @@ import (
     "regexp"
 )
 
-type Page struct {
-    Title string
-    Body  []byte
+type Image struct {
+    Name string
+    Path string
 }
 
 var validPath = regexp.MustCompile("^/(edit|save|view)/([a-zA-Z0-9]+)$")
 
-func loadPage()
+func loadTemplates() map[string]*template.Template{
+    pages := ["index", "contact", "locks"]
+    templates := make(map[string]*template.Template)
+    for _, page := range (pages) {
+        templatePath := fmt.Sprintf("./pages/%s.tmpl", page)
+        templates[page] = template.Must(template.ParseFiles("pages/base.tmpl", templatePath))
+    }
+    return templates
+}
 
-var templates = template.Must(template.ParseFiles("web/pages/edit.html", "view.html"))
+var templates = loadTemplates()
 
-func renderTemplate(w http.ResponseWriter, name string, p *Page) {
+func renderTemplate(w http.ResponseWriter, name string, args []Image) {
     w.Header().Set("Content-Type", "text/html; charset=utf-8")
-    err := templates.ExecuteTemplate(w, name+".html", p)
+    err := templates[name].ExecuteTemplate(w, "base", args)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
     }
@@ -58,11 +66,9 @@ func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.Handl
 
 
 func init() {
-    /* Load templates */
     http.HandleFunc("/", handler)
     http.HandleFunc("/contact", contactHandler)
     http.HandleFunc("/fill", fillHandler)
     http.HandleFunc("/order", orderHandler)
-    loadTemplates()
 }
 
