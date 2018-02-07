@@ -25,7 +25,6 @@ var dataFiles =
         "mousetrap",
     }
 
-
 var templates = loadTemplates()
 var ImageData = loadData()
 
@@ -34,28 +33,24 @@ func loadTemplates() map[string]*template.Template {
     templates := make(map[string]*template.Template)
     for _, page := range (pages) {
         templatePath := fmt.Sprintf("./pages/%s.tmpl", page)
-        templates[page] = template.Must(template.ParseFiles("pages/base.tmpl", templatePath))
+        templates[page] = template.Must(template.ParseFiles( templatePath, "pages/base.tmpl",))
     }
     return templates
 }
 
-func loadData() map[string][]*Image {
+func loadData() map[string][]Image {
 
-    data := make(map[string][]*Image)
+    data := make(map[string][]Image)
 
     for _, fileName := range (dataFiles) {
          dataFile := fmt.Sprintf("./data/%s.csv", fileName)
-         var page [30]*Image
          f, err := os.Open(dataFile)
          if err != nil {
              panic(err)
          }
          lines, err := csv.NewReader(f).ReadAll()
-         if err != nil {
-             panic(err)
-         }
-         for i, line := range lines {
-             data := Image {
+         for _, line := range lines {
+             loadedImage := Image {
                  Item : line[0],
                  Name : line[1],
                  Price : 0,
@@ -63,17 +58,15 @@ func loadData() map[string][]*Image {
                  Pack : line[3],
                  Path : fmt.Sprintf("./images/%s.JPG", line[0]),
              }
-             page[i] = &data
+             data[fileName] = append(data[fileName], loadedImage)
          }
-
     }
     return data
 }
 
-func renderTemplate(w http.ResponseWriter, name string, args []*Image) {
-    log.Println(name)
+func renderTemplate(w http.ResponseWriter, name string, args []Image) {
     w.Header().Set("Content-Type", "text/html; charset=utf-8")
-    err := templates[name].ExecuteTemplate(w, "base", args)
+    err := templates[name].Execute(w,  &args)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
     }
@@ -92,6 +85,7 @@ func orderHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func catalogHandler(w http.ResponseWriter, r *http.Request) {
+    log.Println(ImageData["mousetrap"])
     renderTemplate(w, "catalog", ImageData["mousetrap"])
 }
 

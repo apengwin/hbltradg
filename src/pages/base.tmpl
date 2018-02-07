@@ -1,4 +1,4 @@
-{{define "base" }}
+{{define "header" }}
 <!doctype html>
 <html lang="en">
   <head>
@@ -14,13 +14,15 @@
       <div id=header>
          <h1>HBL Trading (USA) Inc</h1>
       </div>
-        <a href="./contact">Contact Us</a>
       <div id=content>
-        {{template "content"}}
+{{end}}
+{{define "footer"}}
       </div>
       <div id=footer>
         Copyright 2014 HBL TRADING. All rights reserved.
+        <a href="./contact">Contact Us</a>
       </div>
     </body>
   </html>
-{{end}}
+{{end}
+

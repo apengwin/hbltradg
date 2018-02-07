@@ -1,17 +1,25 @@
+{{template "header"}}
 {{define "title"}}
-Foo
+Mousetraps
 {{end}}
-{{define "content"}}
-<table style="width:100%">
-{{range $Images := .}}
+<table style="width:74%">
+<th>
+<td>Item no.</td>
+<td>Price</td>
+<td>Number per case</td>
+<td>Number per pack</td>
+</th>
+{{range .}}
   <tr>
-    <td>.Number</td>
-    <td>.Number</td>
-    <td>.Price</td>
-    <td>.Case</td>
-    <td>.Pack</td>
-    <td>94</td>
+    <td>{{.Item}}</td>
+    <td>{{.Price}}</td>
+    <td>{{.Case}}</td>
+    <td>{{.Pack}}</td>
+    <td><img src={{.Path}} height="100" width="100"></td>
   </tr>
 {{end}}
 </table>
-{{end}}
+
+{{template "footer"}}
+
+
