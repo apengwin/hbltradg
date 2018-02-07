@@ -7,11 +7,11 @@ basic_scaling:
 
 handlers:
 - url: /css
-  static_dir: web/css
+  static_dir: css
   secure: optional
 
 - url: /images
-  static_dir: web/images
+  static_dir: images
   secure: optional
 
 # All other URLs are handled by the Go application.
