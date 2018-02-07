@@ -2,24 +2,22 @@
 {{define "title"}}
 Mousetraps
 {{end}}
-<table style="width:74%">
-<th>
-<td>Item no.</td>
-<td>Price</td>
-<td>Number per case</td>
-<td>Number per pack</td>
-</th>
+<div id="content">
+<ul>
 {{range .}}
-  <tr>
-    <td>{{.Item}}</td>
-    <td>{{.Price}}</td>
-    <td>{{.Case}}</td>
-    <td>{{.Pack}}</td>
-    <td><img src={{.Path}} height="100" width="100"></td>
-  </tr>
+  <li>
+    <div id="list-item">
+      <div><img src={{.Path}} height="100" width="100"></div>
+      <span>{{.Price}}</span>
+      <span>{{.Case}}</span>
+      <span>{{.Pack}}</span>
+      <span>{{.Item}}</span>
+      <span>{{.Name}}</span>
+    <div>
+   </li>
 {{end}}
-</table>
-
+</ul>
+</div>
 {{template "footer"}}
 
 
